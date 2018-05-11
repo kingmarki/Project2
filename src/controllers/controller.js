@@ -49,3 +49,13 @@ export const updateContact = (req, res) => {
     }
   );
 };
+
+//delete a contact from the database
+export const deleteContact = (req, res) => {
+  Contact.remove({ _id: req.params.contactId }, (err, contact) => {
+    if (err) {
+      res.send(err);
+    }
+    res.json({ message: "You have deleted a contact" });
+  });
+};
