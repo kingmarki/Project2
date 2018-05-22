@@ -2,25 +2,21 @@ import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import routes from "./src/routes/routes";
-
+import path from "path";
 const app = express();
 const PORT = 3000;
 
-//mongo connection
-mongoose.connect("mongodb://localhost/project2");
+//mongoose connection
+mongoose.connect("mongodb://localhost/project2"); //database connect
 
-//bodyparser
-app.use(bodyParser.urlencoded({ extended: true })); //parse incoming requests with urlencoded payloads
-app.use(bodyParser.json()); //parse incoming requests with json payloads
+// bodyparser setup
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-routes(app);
+routes(app); //allows for use of routes created earlier
+app.use("/src/views", express.static(path.join(__dirname, "/src/views"))); //load website
+app.get("/", (req, res) =>
+  res.sendFile(path.join(__dirname + "/src/views/index.html"))
+);
 
-//prints stuff to homepage
-app.get("/", (req, res) => {
-  res.send(`Node and express server running on port: ${PORT}`);
-});
-
-//server is listening on this port
-app.listen(PORT, () => {
-  console.log(`the server is up and running on localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`your server is running on port ${PORT}`));

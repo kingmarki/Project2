@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>New Contact</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+
+        <center>
+            <h1>New Contact</h1>
+            <form id="newContactForm" method="POST" action="/contact">
+                <label>First Name: <input id="firstName" name="firstName"></label>
+                <br />
+                <label>Last Name: <input id="lastName" name="lastName"></label>
+                <br />
+                <label>Email<input id="email" name="email"></label>
+                <br />
+                <label>Company: <input id="company" name="company"></label>
+                <br />
+                <label>Phone<input id="phone" name="phone"></label>
+                <br />
+                <button type="submit" id="addContact">Add Contact</button>
+                <br />
+            </form>
+            <hr />
+            <h1>View all in Database</h1>
+            <form method="GET" action="/contact">
+                <input type="submit" value="View all in DB">
+            </form>
+            <br>
+            <hr />
+            
+            <h1>Delete from Database</h1>
+            <br />
+            <label>ID: <input type="text" id="delIDText" name="id"</label>
+            
+            <p id="demo"></p>
+
+            <button type="button" onclick="loadDoc()">Delete Contact</button>
+
+            <script>
+                function loadDoc() {
+                    var xhttp = new XMLHttpRequest();
+                    var idText = document.getElementById("delIDText").value;
+                    var finalDelPath= "/contact/".concat(idText);
+                    xhttp.open("DELETE", finalDelPath, false);
+                    xhttp.send();
+                    var obj = JSON.parse(xhttp.responseText);
+                    document.getElementById("demo").innerHTML = obj.message;
+                }
+            </script>
+            
+            <br/>
+            <hr />
+            <h1>Find particular contact from Database</h1>
+            <br />
+            <label>ID: <input type="text" id="findIDText" name="id"></label>
+            
+            <p id="demo2"></p>
+
+            <button type="button" onclick="loadDoc2()">Load Contact Details</button>
+
+            <script>
+                function loadDoc2() {
+                    var xhttp = new XMLHttpRequest();
+                    var idText = document.getElementById("findIDText").value;
+                    var finalDelPath= "/contact/".concat(idText);
+                    xhttp.open("GET", finalDelPath, false);
+                    xhttp.send();
+                    var obj = JSON.parse(xhttp.responseText);
+                    document.getElementById("demo2").innerHTML = "First Name: " + obj.firstName + "<br /> Last Name: " 
+                    + obj.lastName + "<br /> Email: " + obj.email + "<br /> Phone: " + obj.phone + "<br /> Company: " + obj.company;
+                }
+            </script>
+
+            <br />
+            <hr />
+            <h1> Edit a Contact</h1>
+            <label>ContactID <input type="text" id="updateContID"></label>
+            <br />
+            <label>First Name: <input id="updfirstName" name="updfirstName"></label>
+            <br />
+            <label>Last Name: <input id="updlastName" name="updlastName"></label>
+            <br />
+            <label>Email<input id="updemail" name="updemail"></label>
+            <br />
+            <label>Company: <input id="updcompany" name="updcompany"></label>
+            <br />
+            <label>Phone<input id="updphone" name="updphone"></label>
+            <br />
+            <button id="run" onclick="updateCont()" value="Update Contact">Update Contact</button>
+            <p id="demo3"></p>
+            <script>
+                function updateCont(){
+                    
+                    $.ajax({
+                        url: "/contact/" + document.getElementById("updateContID").value,
+                        type: "PUT",
+                        data: {
+                            firstName: document.getElementById("updfirstName").value,
+                            lastName: document.getElementById("updlastName").value,
+                            email: document.getElementById("updemail").value,
+                            company:document.getElementById("updcompany").value,
+                            phone: document.getElementById("updphone").value
+                        },
+
+                    }); 
+                    document.getElementById("demo3").innerHTML = "Success";
+                }
+            </script>
+</label>
+            
+        </center>
+    </body>
+</html>
